@@ -1,36 +1,40 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, {useState} from 'react'
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableRow from '@mui/material/TableRow';
+import TextField from '@mui/material/TextField';
 
-function App() {
-  const [text, setText] = useState("")
-  const [list, setList] = useState([])
+function MUIToDoList () {
+    const [list, setList] = useState([])
+    const [inputtext, setInputtext] = useState("")
+    const handleSubmit = (evt) => {
+        evt.preventDefault()
+        setList([...list, inputtext])
+        setInputtext("")
+    }
+    const handleDeleteClick = (i) => {
+        list.splice(i, 1)
+        setList([...list])
+    }
 
-  const handleClick = () => {
-    setList([...list, text])
-    setText("")
-  }
-  return (
-    <div>
-      <h1>My react app</h1>
-      <div><textarea value={text} onChange={(evt) => { setText(evt.target.value) }}></textarea></div>
-      <div><button onClick={handleClick}>Add</button></div>
-      <table>
-        <thead><tr><td>TODO</td><td>Delete</td></tr></thead>
-        <tbody>
-          {list.map(
-            (el, i) => {
-              return (
-                <tr key={i}><td>{el}</td><td>C</td></tr>
-              )
-            }
-          )
-          }
-        </tbody>
-      </table>
-    </div>
-  )
+    return (
+        <Box>
+            <Box>
+                <Box component="form" onSubmit={handleSubmit} display="flex" alignContent='center'>
+                    <TextField type="text" label="Job" autoFocus="true" value={inputtext} onChange={(evt) => { setInputtext(evt.target.value) }}></TextField>
+                    <Button  variant="contained" color="primary" onClick={handleSubmit} type="submit">add</Button>
+                </Box>
+            </Box>
+            <Table>
+                <TableBody>
+                    {list.map((x, i) => { return (<TableRow key={i}><TableCell>{x}</TableCell><TableCell><Button variant="contained" color="error" onClick={() => handleDeleteClick(i)}>X</Button></TableCell></TableRow>) })}
+                </TableBody>
+            </Table>
+        </Box>
+    )
 }
 
-export default App
+export default MUIToDoList
